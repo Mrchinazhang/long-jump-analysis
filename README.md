@@ -146,6 +146,21 @@ long-jump-analysis/
 └── README.md
 ```
 
+### 各文件来源说明
+
+| 文件 / 目录 | 来源 | 说明 |
+| --- | --- | --- |
+| `long_jump_analysis.py` | 作者编写（项目主体） | 核心算法都在这里：KMeans 聚类分段、线性插值重采样、抛物线拟合、上升/下降速度换算，同时支持命令行与 `import` 两种用法。 |
+| `tests/test_analysis.py` | 作者补充 | 23 项 `unittest` 回归测试，覆盖参数化精度、退化情形与非法入参，不依赖 pytest。 |
+| `examples/sample_coordinates.txt` | 作者提供 | 一份可直接 `python long_jump_analysis.py < examples/sample_coordinates.txt` 喂入的内置示例轨迹。 |
+| `requirements.txt` | 项目初始化附带 | 声明运行依赖：`numpy`、`scikit-learn`、`matplotlib`。 |
+| `LICENSE` | 项目初始化附带 | MIT 许可证，版权归作者 Mrchinazhang（2026）。 |
+| `README.md` | 作者编写 | 你正在读的这份文档。 |
+| `.gitignore` | 项目初始化附带 | 忽略 `__pycache__/`、虚拟环境、IDE 配置等，避免把本地杂物提交进仓库。 |
+| `.gitattributes` | 仓库创建时生成 | GitHub Desktop 建仓时写入，统一换行符与文本/二进制处理，保持跨平台一致性。 |
+
+> 主体逻辑（KMeans 聚类 + 抛物线拟合 + 速度换算）由作者从零实现；依赖声明与仓库配套文件采用社区通用模板，不重复造轮子。
+
 ## 测试
 
 只用标准库 `unittest`，不需要额外装 pytest：
