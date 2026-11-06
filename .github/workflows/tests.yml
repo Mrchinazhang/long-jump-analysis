@@ -10,7 +10,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        # Python 3.9 已 EOL；ubuntu-latest 的 setup-python 无法再为它准备环境，
+        # 保留会让 CI 在「安装 Python」这一步固定变红（与代码无关）。
+        python-version: ['3.10', '3.11', '3.12', '3.13']
     env:
       MPLBACKEND: Agg          # 无显示器环境，避免 matplotlib 尝试开窗
     steps:

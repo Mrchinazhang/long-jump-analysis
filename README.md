@@ -47,7 +47,7 @@ flowchart LR
 
 ## 安装
 
-需要 Python 3.9 及以上（CI 覆盖 3.9 / 3.10 / 3.11 / 3.12）。
+需要 Python 3.9 及以上。CI 覆盖 3.10 / 3.11 / 3.12 / 3.13；3.9 已停止官方维护，GitHub 托管 runner 无法再为它准备环境，因此不再自动验证（代码本身仍兼容）。
 
 ```bash
 git clone https://github.com/Mrchinazhang/long-jump-analysis.git
@@ -185,7 +185,7 @@ python -m unittest discover -s tests -v
 
 覆盖内容包括：核心函数是否真在模块顶层、`--fps` / `--pixel-to-meter` 参数化是否精确生效（翻倍则速度严格翻倍）、插值重采样是否避免零位移平台、共线与开口向上等退化情形、以及各类非法入参是否抛出可读的 `ValueError`。
 
-每次 push / PR 会在 GitHub Actions 上跨 Python 3.9–3.12 自动重跑这套测试，并额外执行一次 `--demo --no-show` 命令行冒烟（无显示器环境用 `MPLBACKEND=Agg`）。
+每次 push / PR 会在 GitHub Actions 上跨 Python 3.10–3.13 自动重跑这套测试，并额外执行一次 `--demo --no-show` 命令行冒烟（无显示器环境用 `MPLBACKEND=Agg`）。
 
 ## 几个设计上的取舍
 
