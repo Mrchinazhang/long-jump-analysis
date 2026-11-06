@@ -2,6 +2,7 @@
 
 [![tests](https://github.com/Mrchinazhang/long-jump-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/Mrchinazhang/long-jump-analysis/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![支持作者](https://img.shields.io/badge/%E7%88%B1%E5%8F%91%E7%94%B5-%E8%AF%B7%E6%88%91%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1-946ce6)](https://ifdian.net/a/Mrchinazhang)
 
 从逐帧坐标还原一次跳远的技术指标：起跳帧、落地帧、最高点、滞空时长，以及上升段与下降段的平均速度。
 
@@ -209,6 +210,12 @@ python -m unittest discover -s tests -v
 
 - 开发环境、测试与 PR 约定见 [CONTRIBUTING.md](./CONTRIBUTING.md)
 - 威胁模型与漏洞报告方式见 [SECURITY.md](./SECURITY.md)
+
+## 支持这个项目
+
+如果这个工具帮你省了时间，欢迎在 **[爱发电](https://ifdian.net/a/Mrchinazhang)** 请我喝杯咖啡。
+
+不想花钱也完全没关系——点个 ⭐、提个 issue、把链接分享给需要的人，同样是支持。
 
 ## 许可
 
