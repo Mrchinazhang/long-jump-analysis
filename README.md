@@ -1,20 +1,27 @@
 # long-jump-analysis
 
+[![tests](https://github.com/Mrchinazhang/long-jump-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/Mrchinazhang/long-jump-analysis/actions/workflows/tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+
 从逐帧坐标还原一次跳远的技术指标：起跳帧、落地帧、最高点、滞空时长，以及上升段与下降段的平均速度。
 
 给视频里的运动员打点（每帧一个 `x, y`）之后，剩下的计算交给这个脚本。
 
+以下是 `python long_jump_analysis.py --demo --no-show` 的真实输出（节选）：
+
 ```
+=== 运动员坐标聚类分析 ===
+使用内置示例数据（跳过手动输入）
 起跳点坐标: (25.00, 18.12) (帧 19, 对应坐标: (25.08, 18.34))
 落点坐标: (95.00, 18.12) (帧 280, 对应坐标: (94.92, 18.34))
 总帧数: 300 (帧率 30 fps, 1像素=0.1米)
 
 === 滞空阶段速度分析 ===
-上升阶段帧范围: 19 到 149
-下降阶段帧范围: 150 到 280
+上升阶段帧范围: 19 到 150
+下降阶段帧范围: 151 到 280
 滞空时长: 8.73 秒（抛物线）
-实际平均上升速度 (x, y): (0.65, 0.87) 米/秒
-实际平均下降速度 (x, y): (0.65, -0.87) 米/秒
+实际平均上升速度 (x, y): (0.80, 1.07) 米/秒
+实际平均下降速度 (x, y): (0.80, -1.08) 米/秒
 
 === 滞空阶段抛物线方程 ===
 y = -0.0027x² + 0.7010x + 18.6429
@@ -40,7 +47,7 @@ flowchart LR
 
 ## 安装
 
-需要 Python 3.8 及以上。
+需要 Python 3.9 及以上（CI 覆盖 3.9 / 3.10 / 3.11 / 3.12）。
 
 ```bash
 git clone https://github.com/Mrchinazhang/long-jump-analysis.git
@@ -141,7 +148,12 @@ long-jump-analysis/
 │   └── test_analysis.py        # 23 项回归测试
 ├── examples/
 │   └── sample_coordinates.txt  # 可直接重定向输入的示例
+├── .github/
+│   ├── workflows/tests.yml     # 4 个 Python 版本跑 unittest + 命令行冒烟
+│   └── FUNDING.yml             # 赞助入口（需先开通 GitHub Sponsors）
 ├── requirements.txt
+├── CONTRIBUTING.md
+├── SECURITY.md
 ├── LICENSE
 └── README.md
 ```
@@ -158,6 +170,8 @@ long-jump-analysis/
 | `README.md` | 作者编写 | 你正在读的这份文档。 |
 | `.gitignore` | 项目初始化附带 | 忽略 `__pycache__/`、虚拟环境、IDE 配置等，避免把本地杂物提交进仓库。 |
 | `.gitattributes` | 仓库创建时生成 | GitHub Desktop 建仓时写入，统一换行符与文本/二进制处理，保持跨平台一致性。 |
+| `.github/workflows/tests.yml` | 项目维护补充 | GitHub Actions：4 个 Python 版本分别装依赖、跑 `unittest`、再跑一次 `--demo --no-show` 冒烟。 |
+| `CONTRIBUTING.md` / `SECURITY.md` / `.github/FUNDING.yml` | 项目维护补充 | 贡献约定、安全边界与赞助入口（采用社区通用模板）。 |
 
 > 主体逻辑（KMeans 聚类 + 抛物线拟合 + 速度换算）由作者从零实现；依赖声明与仓库配套文件采用社区通用模板，不重复造轮子。
 
@@ -170,6 +184,8 @@ python -m unittest discover -s tests -v
 ```
 
 覆盖内容包括：核心函数是否真在模块顶层、`--fps` / `--pixel-to-meter` 参数化是否精确生效（翻倍则速度严格翻倍）、插值重采样是否避免零位移平台、共线与开口向上等退化情形、以及各类非法入参是否抛出可读的 `ValueError`。
+
+每次 push / PR 会在 GitHub Actions 上跨 Python 3.9–3.12 自动重跑这套测试，并额外执行一次 `--demo --no-show` 命令行冒烟（无显示器环境用 `MPLBACKEND=Agg`）。
 
 ## 几个设计上的取舍
 
@@ -188,6 +204,11 @@ python -m unittest discover -s tests -v
 - **只有二维坐标。** 无法还原深度方向的信息，也无法计算真正的三维腾空高度。
 - **`--frames` 要与视频实际帧数一致。** 它是"把轨迹重采样成多少帧"，不是越多越好。填得远大于真实帧数，滞空时长会被拉长。
 - **图表中文标签需要中文字体。** 代码里优先用 `Microsoft YaHei`、`SimHei`，Linux/macOS 上若未安装会显示成方块，可自行修改 `plot_results()` 中的 `font.sans-serif`。
+
+## 参与贡献 / 安全
+
+- 开发环境、测试与 PR 约定见 [CONTRIBUTING.md](./CONTRIBUTING.md)
+- 威胁模型与漏洞报告方式见 [SECURITY.md](./SECURITY.md)
 
 ## 许可
 

@@ -1,3 +1,4 @@
-numpy>=1.21
-scikit-learn>=1.0
-matplotlib>=3.4
+# 带上界以保证可复现：大版本升级可能改变 KMeans 与绘图行为
+numpy>=1.21,<3
+scikit-learn>=1.0,<2
+matplotlib>=3.4,<4

@@ -1,3 +1,13 @@
+# 密钥与本地凭证（防止误提交）
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.secret
+id_rsa*
+id_ed25519*
+
 # Python
 __pycache__/
 *.py[cod]
