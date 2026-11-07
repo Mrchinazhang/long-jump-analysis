@@ -17,6 +17,10 @@
 作为库使用：
     from long_jump_analysis import analyze_coordinates, analyze_midair_speed
 """
+from __future__ import annotations
+
+from typing import Any, Optional
+
 import argparse
 
 import numpy as np
@@ -31,7 +35,7 @@ DEFAULT_DISTANCE_REF_M = 10.0  # 成绩缩放的参考距离，米
 DEFAULT_CLUSTERS = 3           # 起跳 / 滞空 / 落地
 
 
-def parse_args(argv=None):
+def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
     """命令行参数。不带参数运行时行为与原来完全一致（走交互输入）。"""
     parser = argparse.ArgumentParser(
         description="运动员坐标聚类分析与滞空阶段速度估算",
@@ -52,7 +56,7 @@ def parse_args(argv=None):
     return parser.parse_args(argv)
 
 
-def demo_coordinates():
+def demo_coordinates() -> np.ndarray:
     """内置示例数据：一条完整的滞空轨迹（起跳点 → 顶点 → 落地点）。
 
     坐标单位为像素（与视频标注一致）。y 按
@@ -67,7 +71,7 @@ def demo_coordinates():
     return np.array(arc, dtype=float)
 
 
-def input_coordinates(use_demo=False):
+def input_coordinates(use_demo: bool = False) -> tuple[np.ndarray, float]:
     """手动输入运动员的坐标数据和跳远成绩（起跳前、滞空、落地后）。"""
     if use_demo:
         print("使用内置示例数据（跳过手动输入）")
@@ -111,8 +115,9 @@ def input_coordinates(use_demo=False):
     return np.array(coordinates, dtype=float), distance
 
 
-def analyze_coordinates(coordinates, frames=DEFAULT_FRAMES, clusters=DEFAULT_CLUSTERS,
-                        random_state=0):
+def analyze_coordinates(coordinates: np.ndarray, frames: int = DEFAULT_FRAMES,
+                        clusters: int = DEFAULT_CLUSTERS,
+                        random_state: int = 0) -> tuple[np.ndarray, ...]:
     """使用K-means聚类分析坐标数据，并把轨迹重采样到指定帧数。"""
     if coordinates.ndim != 2 or coordinates.shape[1] != 2:
         raise ValueError("坐标数据必须是 N×2 的二维数组（每行一个 x,y）")
@@ -147,9 +152,10 @@ def analyze_coordinates(coordinates, frames=DEFAULT_FRAMES, clusters=DEFAULT_CLU
     return takeoff, landing, labels, centers, frame_coords
 
 
-def analyze_midair_speed(frame_coords, takeoff_frame, landing_frame, distance=0.0,
-                         fps=DEFAULT_FPS, pixel_to_meter=DEFAULT_PIXEL_TO_METER,
-                         distance_ref_m=DEFAULT_DISTANCE_REF_M):
+def analyze_midair_speed(frame_coords: np.ndarray, takeoff_frame: int, landing_frame: int,
+                         distance: float = 0.0, fps: float = DEFAULT_FPS,
+                         pixel_to_meter: float = DEFAULT_PIXEL_TO_METER,
+                         distance_ref_m: float = DEFAULT_DISTANCE_REF_M) -> dict[str, Any]:
     """根据实际坐标数据和跳远成绩动态计算滞空阶段的速度。
 
     参数
@@ -236,7 +242,8 @@ def analyze_midair_speed(frame_coords, takeoff_frame, landing_frame, distance=0.
     }
 
 
-def plot_results(coordinates, labels, centers, takeoff, landing):
+def plot_results(coordinates: np.ndarray, labels: np.ndarray, centers: np.ndarray,
+                takeoff: np.ndarray, landing: np.ndarray) -> None:
     """绘制坐标分布和聚类结果"""
     # 中文字体：不设置时 matplotlib 默认字体没有中文字形，标题会显示成方块
     plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
@@ -268,7 +275,7 @@ def plot_results(coordinates, labels, centers, takeoff, landing):
     plt.show()
 
 
-def main(argv=None):
+def main(argv: Optional[list[str]] = None) -> None:
     args = parse_args(argv)
 
     print("=== 运动员坐标聚类分析 ===")
