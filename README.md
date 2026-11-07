@@ -198,6 +198,8 @@ python -m unittest discover -s tests -v
 
 **默认参数全部提到模块常量。** `DEFAULT_FPS`、`DEFAULT_PIXEL_TO_METER`、`DEFAULT_FRAMES` 既是命令行默认值，也能被调用方覆盖，不同设备的参数不必改源码。
 
+**核心函数全部带类型注解（PEP 484）。** 模块顶层每个函数都按 `参数: 类型` 与 `-> 返回类型` 标注了签名（例如 `analyze_midair_speed(frame_coords: np.ndarray, fps: float = DEFAULT_FPS) -> dict[str, Any]`）。类型注解运行时零开销，只为 IDE 自动补全和 `mypy` 静态检查服务，且顶部用 `from __future__ import annotations` 保证在 Python 3.9+ 都能安全解析。
+
 ## 已知限制
 
 - **贴地坐标会被合并。** KMeans 按空间距离聚类，助跑段与落地后的坐标几乎共线，容易被合并成同一簇，导致起跳点/落点中心偏移。建议输入时只保留从起跳到落地的轨迹段（内置示例就只给了这一段）。
